@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Siparişler</h1>
+
+<form class="filters" method="get" action="/">
+  <label>Durum</label>
+  <select name="durum">
+    {% for d in ["TÜMÜ","Depodaki Siparişler","Devam Eden Siparişler","Kargoya Verilecek Siparişler","Tamamlanan Siparişler","İptal Edilen Siparişler"] %}
+    <option value="{{d}}" {{ "selected" if d==durum else "" }}>{{d}}</option>
+    {% endfor %}
+  </select>
+
+  <label>Platform</label>
+  <select name="platform">
+    <option>TÜMÜ</option>
+    {% for p in platformlar %}
+    <option value="{{p}}" {{ "selected" if p==platform else "" }}>{{p}}</option>
+    {% endfor %}
+  </select>
+
+  <label>Kargo</label>
+  <select name="kargo">
+    <option>TÜMÜ</option>
+    {% for k in kargolar %}
+    <option value="{{k}}" {{ "selected" if k==kargo else "" }}>{{k}}</option>
+    {% endfor %}
+  </select>
+
+  <label>Tarih</label>
+  <input name="t1" placeholder="GG.AA.YYYY" value="{{t1}}" />
+  <input name="t2" placeholder="GG.AA.YYYY" value="{{t2}}" />
+  <button type="submit">Ara</button>
+
+  <button hx-post="/refresh" hx-swap="none" type="button">API’dan Güncelle</button>
+</form>
+
+<div class="cards">
+  {% for o in orders %}
+  <div class="card" onclick="location.href='/order/{{o.no}}'">
+    <div class="colorbar" style="background: {{ o._color }}"></div>
+    <div class="card-meta">
+      <div class="left">
+        <div class="title">{{o.firstname}} {{o.lastname}}</div>
+        <div class="time">{{o.datetime}} <span class="days">{{ o._days_ago }}</span></div>
+        <div class="platcargo">{{o.entegration}} | {{o.cargo_company}}</div>
+      </div>
+      <div class="right">
+        <div class="bold">Order ID: {{o.no}}</div>
+        <div class="bold">Toplam: {{o.grand_total}} TL</div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+    <div>Bu filtrelerle sipariş bulunamadı.</div>
+  {% endfor %}
+</div>
+{% endblock %}

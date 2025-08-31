@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="container page-picklist">
+  <h1>Depodan Toplanacaklar</h1>
+
+  <form method="get" action="/picklist" class="filters filter-bar">
+    <label>Platform</label>
+    <select name="platform">
+      {% for p in ["TÜMÜ","trendyol","hepsiburada","amazon","n11","ciceksepeti","pazarama","idefix"] %}
+        <option value="{{p}}" {{ "selected" if p==platform else "" }}>{{p}}</option>
+      {% endfor %}
+    </select>
+    <label>Tarih</label>
+    <input name="t1" placeholder="GG.AA.YYYY" value="{{t1}}">
+    <input name="t2" placeholder="GG.AA.YYYY" value="{{t2}}">
+    <label>Arama</label>
+    <input name="q" placeholder="Ürün adı / stok / barkod" value="{{q}}">
+    <button type="submit">Uygula</button>
+  </form>
+
+  <div class="cards pickgrid">
+    {% for u in urunler %}
+    <div class="card pick-card">
+      <div class="media">
+        {% if u.picture %}<img src="{{u.picture}}" alt="ürün">
+        {% else %}<div class="img-ph">IMG</div>{% endif %}
+      </div>
+
+      <div class="content">
+        <h3 class="title clamp-2">{{ u.name }}</h3>
+        <div class="mini">Stok: <b>{{ u.stock_code }}</b> | Barkod: {{ u.barcode or "-" }}</div>
+        <div class="mini">Toplam Adet: <b>{{ u.adet }}</b> | {{ u.days_ago }}</div>
+
+        {% if u.platformlar %}
+        <div class="platgrid small">
+          {% for plat, lst in u.platformlar.items() %}
+            <span class="plat {{plat|lower}}">{{ plat }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="actions">
+          <label class="chk">
+            <input type="checkbox"
+                   name="value"
+                   value="true"
+                   {% if u._collected %}checked{% endif %}
+                   hx-post="/toggle-collected"
+                   hx-vals='{"barcode":"{{u.barcode}}"}'
+                   hx-swap="none"
+                   hx-trigger="change">
+            Toplandı
+          </label>
+
+          <div class="depo-label">Depo:</div>
+          <form method="post" action="/locations/set" class="locform">
+            <input type="hidden" name="name" value="{{ u.name }}">
+            <input name="location" placeholder="örn: 1.2.45" value="{{ u.depo_yeri or '' }}">
+            <button type="submit">Kaydet</button>
+          </form>
+        </div>
+
+        <div class="depo-yeri">Yer: <b>{{ u.depo_yeri or "-" }}</b></div>
+      </div>
+    </div>
+    {% else %}
+      <div>Bu filtrelerle ürün bulunamadı.</div>
+    {% endfor %}
+  </div>
+</main>
+{% endblock %}

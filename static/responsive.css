@@ -1,0 +1,174 @@
+/* Genel */
+:root { --pad: 12px; --gap: 12px; --card-bg: #0b1220; --card-b: #1c2433; }
+*{box-sizing:border-box} body{margin:0;background:#0a0f1a;color:#e5e7eb;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
+.container{max-width:1100px;margin:0 auto;padding:var(--pad)}
+
+/* Navbar */
+.nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.nav a{padding:10px 12px;border-radius:10px;background:#0f172a;color:#e2e8f0;text-decoration:none}
+.nav a.active{background:#1e293b}
+
+/* Form alanları */
+.filter-bar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gap)}
+.field{display:flex;gap:8px;align-items:center}
+.field label{min-width:72px;color:#cbd5e1}
+.filter-bar input, .filter-bar select{width:100%;height:42px;padding:8px 10px;border-radius:10px;border:1px solid #263043;background:#0b1220;color:#e5e7eb}
+.filter-bar button{height:42px;padding:0 14px;border-radius:10px;border:0;background:#334155;color:#fff}
+
+/* Kartlar */
+.card{display:grid;grid-template-columns:120px 1fr;gap:14px;padding:14px;border:1px solid var(--card-b);border-radius:16px;background:var(--card-bg)}
+.card .thumb{width:120px;height:120px;border-radius:12px;overflow:hidden;background:#0b1220;display:flex;align-items:center;justify-content:center}
+.card .thumb img{max-width:100%;max-height:100%;object-fit:contain}
+.card .meta{display:grid;gap:6px}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#1f2937;color:#fff;font-size:12px}
+
+/* Depo yer satırı */
+.place-row{display:flex;gap:8px;align-items:center}
+.place-row input{flex:1}
+
+/* Geniş tablolar taşmasın */
+.table-wrap{overflow:auto}
+
+/* --- MOBİL --- */
+@media (max-width: 768px){
+  .container{padding:10px}
+  .nav{gap:6px}
+  .nav a{padding:8px 10px;font-size:14px}
+  .filter-bar{grid-template-columns:1fr; gap:10px}
+  .card{grid-template-columns:1fr; gap:10px}
+  .card .thumb{width:100%;height:180px}
+  .btn{min-height:44px}
+  input, select, button{font-size:16px} /* iOS zoom'u engeller */
+}
+
+/* Daha dar telefonlar */
+@media (max-width: 420px){
+  .card .thumb{height:160px}
+  .badge{font-size:11px}
+}
+@media (max-width:768px){
+  .filters{grid-template-columns:1fr !important}
+  .filters button{width:100%}
+  .pick-card{grid-template-columns:1fr}
+  .pick-card .media{width:100%;height:180px}
+  input,select,button{font-size:16px} /* iOS zoom'u engeller */
+}
+/* ==== PORTRAIT (dikey) KİLİT – Picklist kartı taşmalarını bitir ==== */
+@media (orientation: portrait) {
+  /* Kartları tek sütuna indir, kartı tam genişlik kullan */
+  .cards.pickgrid{ grid-template-columns:1fr !important; }
+  .card.pick-card{
+    display:grid !important;
+    grid-template-columns:1fr !important; /* görsel üstte, içerik altta */
+    gap:12px;
+    overflow:hidden; /* taşan çocukları kırp */
+  }
+  .card.pick-card .media{ width:100%; height:200px; } /* görsel boyunu KORU */
+  .card.pick-card .content{ min-width:0; }            /* metin taşması olmasın */
+
+  /* Aksiyon alanını dikey akıta: önce Toplandı checkbox, sonra Depo formu */
+  .card.pick-card .actions{
+    display:grid !important;
+    grid-template-columns:1fr;   /* tek kolon */
+    row-gap:10px;
+    align-items:start;
+    width:100%;
+  }
+  .card.pick-card .actions .chk{
+    position:static !important;
+    transform:none !important;
+    justify-self:start;
+  }
+
+  /* Depo + Kaydet formu: input tam genişlik, buton alta insin */
+  .card.pick-card .locform{
+    display:grid !important;
+    grid-template-columns:1fr;   /* input */
+    gap:8px;
+    width:100%;
+  }
+  .card.pick-card .locform input{ width:100%; min-width:0 !important; }
+  .card.pick-card .locform button{ width:100%; white-space:nowrap; }
+
+  /* Başlık ve satır aralıklarını bir tık sıkılaştır (sığma hissi için) */
+  .card.pick-card .title{ font-size:18px; line-height:1.25; }
+}
+
+/* Genel – yatayda da düzgün kalsın (daha önceki çakışmaları bastırır) */
+.card.pick-card .locform input{ min-width:0 !important; }
+.card.pick-card .locform{ grid-template-columns:minmax(0,1fr) auto; gap:8px; }
+@media (max-width:480px){
+  /* çok küçük cihazda butonu yine alta indir */
+  .card.pick-card .locform{ grid-template-columns:1fr !important; }
+  .card.pick-card .locform button{ width:100%; }
+}
+
+/* ÜST MENÜ: taşmadan kullanılabilsin (dikeyde de) */
+.topbar nav{
+  flex-wrap:nowrap !important;
+  overflow-x:auto !important;
+  white-space:nowrap !important;
+  -webkit-overflow-scrolling:touch;
+}
+.topbar nav::-webkit-scrollbar{ display:none }
+/* ========== MOBILE HOTFIX v3 (portrait + general) ========== */
+
+/* Genel: yatay kaymayı ve kart taşmasını kes */
+html, body { overflow-x: hidden; }
+.card { box-sizing: border-box; max-width: 100%; overflow: hidden; }
+
+/* ÜST MENÜ: kaydırılabilir; wrap kapalı */
+.topbar nav {
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  white-space: nowrap !important;
+  -webkit-overflow-scrolling: touch;
+}
+.topbar nav::-webkit-scrollbar { display: none; }
+
+/* PICKLIST: tek sütun ve sabit düzen (çakışan flex/absolute kurallarını bastır) */
+.cards.pickgrid { grid-template-columns: 1fr !important; }
+.card.pick-card {
+  display: grid !important;
+  grid-template-columns: 120px 1fr !important;
+  gap: 12px;
+  align-items: start;
+  width: 100% !important;
+}
+@media (orientation: portrait) {
+  .card.pick-card { grid-template-columns: 1fr !important; }
+  .card.pick-card .media { width: 100% !important; height: 200px !important; }
+}
+
+/* Checkbox hiçbir zaman absolute/scale olmasın */
+.pick-card .chk { position: static !important; transform: none !important; margin: 0; }
+.pick-card .chk input { width: 22px; height: 22px; transform: none !important; }
+
+/* Aksiyonlar ve Depo formu: taşma yok */
+.card.pick-card .actions {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  row-gap: 10px;
+  width: 100%;
+}
+.card.pick-card .locform {
+  display: grid !important;
+  grid-template-columns: minmax(0,1fr) auto !important; /* input esner, buton sabit */
+  gap: 8px !important;
+  width: 100%;
+}
+.card.pick-card .locform input { min-width: 0 !important; width: 100% !important; }
+.card.pick-card .locform button { white-space: nowrap !important; }
+@media (max-width: 480px) {
+  .card.pick-card .locform { grid-template-columns: 1fr !important; }
+  .card.pick-card .locform button { width: 100% !important; }
+}
+
+/* SİPARİŞLER: hafif zoom-out (okunabilirliği bozmadan) */
+@media (max-width: 768px) {
+  .container { padding-left: 10px; padding-right: 10px; }
+  .page-orders { font-size: 95% !important; }
+  .page-orders .card { padding: 12px !important; }
+}
+
+/* İmza: MOBILE HOTFIX v3 */

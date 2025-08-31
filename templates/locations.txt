@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Depo Yerleri</h1>
+
+<form method="get" action="/locations" class="filters">
+  <input name="q" placeholder="Ürün adı ara" value="{{q}}" />
+  <button type="submit">Ara</button>
+  <a class="button" href="/locations/export">CSV indir</a>
+</form>
+
+<form method="post" action="/locations/set" class="inline-forms">
+  <input name="name" placeholder="Ürün adı" required />
+  <input name="location" placeholder="Depo yeri (örn: 1.2.45)" required />
+  <button type="submit">Ekle/Güncelle</button>
+</form>
+
+<form method="post" action="/locations/import" enctype="multipart/form-data" class="inline-forms">
+  <input type="file" name="file" accept=".csv" />
+  <button type="submit">CSV Yükle</button>
+</form>
+
+<div class="cards table-wrap">
+  {% for it in items %}
+  <div class="card">
+    <div class="card-title">{{ it.name }}</div>
+    <div>Yer: <b>{{ it.location }}</b></div>
+    <form method="post" action="/locations/set" class="locform">
+      <input type="hidden" name="name" value="{{ it.name }}">
+      <input name="location" value="{{ it.location }}" />
+      <button type="submit">Güncelle</button>
+    </form>
+  </div>
+  {% else %}
+    <div>Kayıt bulunamadı.</div>
+  {% endfor %}
+</div>
+{% endblock %}

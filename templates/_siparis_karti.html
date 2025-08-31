@@ -1,0 +1,18 @@
+<div class="card order-card" onclick="location.href='/order/{{o.no}}'">
+  <div class="colorbar" style="background: {{ o._color }}"></div>
+  <div class="card-meta">
+    <div class="left">
+      <div class="title">{{o.firstname}} {{o.lastname}}</div>
+      <div class="time">{{o.datetime}} <span class="days">{{ o._days_ago }}</span></div>
+      <div class="platcargo">{{o.entegration}} | {{o.cargo_company}}</div>
+    </div>
+    <div class="right">
+      <div class="bold">Order ID: {{o.no}}</div>
+      <div class="bold">Toplam: {{o.grand_total}} TL</div>
+    </div>
+  </div>
+</div>
+<div class="order-meta hidden">
+  <span class="order-id">#{{ order.id }}</span>
+  <span class="order-total">{{ order.total | currency }}</span>
+</div>

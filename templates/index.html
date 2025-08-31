@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="container page-orders">
+  <h1>Siparişler</h1>
+
+  <form class="filters" method="get" action="/">
+    <label>Durum</label>
+    <select name="durum">
+      {% for d in ["TÜMÜ","Depodaki Siparişler","Devam Eden Siparişler","Kargoya Verilecek Siparişler","Tamamlanan Siparişler","İptal Edilen Siparişler"] %}
+      <option value="{{d}}" {{ "selected" if d==durum else "" }}>{{d}}</option>
+      {% endfor %}
+    </select>
+
+    <label>Platform</label>
+    <select name="platform">
+      <option>TÜMÜ</option>
+      {% for p in platformlar %}
+      <option value="{{p}}" {{ "selected" if p==platform else "" }}>{{p}}</option>
+      {% endfor %}
+    </select>
+
+    <label>Kargo</label>
+    <select name="kargo">
+      <option>TÜMÜ</option>
+      {% for k in kargolar %}
+      <option value="{{k}}" {{ "selected" if k==kargo else "" }}>{{k}}</option>
+      {% endfor %}
+    </select>
+
+    <label>Tarih</label>
+    <input name="t1" placeholder="GG.AA.YYYY" value="{{t1}}" />
+    <input name="t2" placeholder="GG.AA.YYYY" value="{{t2}}" />
+    <button type="submit">Ara</button>
+
+    <button hx-post="/refresh" hx-swap="none" type="button">API’dan Güncelle</button>
+    <button hx-post="/refresh-token" hx-swap="none" type="button">🔑 Token Güncelle</button>
+  </form>
+
+  <div class="cards">
+    {% for o in orders %}
+    <div class="card" onclick="location.href='/order/{{o.no}}'">
+      <div class="colorbar" data-color="{{ o._color }}"></div>
+      <div class="card-meta">
+        <div class="left">
+          <div class="title">{{o.firstname}} {{o.lastname}}</div>
+          <div class="order-id">Sipariş No: {{o.no}}</div>
+          <div class="time">{{o.datetime[:10]}} {{o.datetime[11:16]}} <span class="days">{{ o._days_ago }}</span></div>
+          <div class="platcargo">{{o.entegration}} | {{o.cargo_company}}</div>
+        </div>
+        <div class="right">
+          <div class="status">{{o.store_order_status_name}}</div>
+          <div class="total">Toplam: {{o.grand_total}} TL</div>
+          <div class="product-count">{{o.order_product|length}} ürün</div>
+        </div>
+      </div>
+    </div>
+    {% else %}
+      <div class="no-orders">Bu filtrelerle sipariş bulunamadı.</div>
+    {% endfor %}
+  </div>
+</main>
+
+<script>
+// Apply dynamic colors to colorbar elements
+document.addEventListener('DOMContentLoaded', function() {
+  const colorbars = document.querySelectorAll('.colorbar[data-color]');
+  colorbars.forEach(function(colorbar) {
+    const color = colorbar.getAttribute('data-color');
+    if (color) {
+      colorbar.style.backgroundColor = color;
+    }
+  });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  depo-web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - DEBUG=false
+      - HOST=0.0.0.0
+      - PORT=8000
+      - WORKERS=2
+    volumes:
+      - ./output.json:/app/output.json
+      - ./locations.csv:/app/locations.csv
+      - ./token.txt:/app/token.txt
+    restart: unless-stopped

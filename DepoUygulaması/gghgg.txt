@@ -1,0 +1,11 @@
+Microsoft Windows [Version 10.0.19045.6093]
+(c) Microsoft Corporation. Tüm hakları saklıdır.
+
+C:\Users\TEMEL ONLİNE\Desktop\DepoUygulaması>python main.py
+Traceback (most recent call last):
+  File "C:\Users\TEMEL ONLİNE\Desktop\DepoUygulaması\main.py", line 209, in <module>
+    if f_durum != "İptal Edilen Siparişler":
+       ^^^^^^^
+NameError: name 'f_durum' is not defined
+
+C:\Users\TEMEL ONLİNE\Desktop\DepoUygulaması>

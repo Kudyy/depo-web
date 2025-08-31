@@ -1,0 +1,16 @@
+<div class="urun card">
+  <div class="urun-top">
+    <div class="ad">{{urun.name}}</div>
+    <div class="mini">Barkod: {{urun.barcode}} | Stok: {{urun.store_stock_code}} | Adet: {{urun.quantity}}</div>
+  </div>
+  <label class="chk">
+    <input type="checkbox"
+           name="value"
+           {% if urun.collected %}checked{% endif %}
+           hx-post="/toggle-collected"
+           hx-vals='{"barcode":"{{urun.barcode}}"}'
+           hx-swap="none"
+           hx-trigger="change">
+    Toplandı
+  </label>
+</div>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <title>Depo Web</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+  <link rel="stylesheet" href="/static/styles.css?v=5">
+  <link rel="stylesheet" href="/static/responsive.css?v=5">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">📦 Depo Web</div>
+    <nav>
+      <a href="/">Siparişler</a>
+      <a href="/picklist">Depodan Toplanacaklar</a>
+      <a href="/locations">Depo Yerleri</a>
+    </nav>
+  </header>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

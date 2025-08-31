@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="order-header" style="background: {{order._color}}">
+  <div class="oh-left">
+    <div class="oh-name">{{order.firstname}} {{order.lastname}}</div>
+    <div class="oh-id">Order ID: {{order.no}}</div>
+  </div>
+  <div class="oh-right">
+    <form method="post" action="/order/{{order.no}}/print" hx-post="/order/{{order.no}}/print" hx-swap="none">
+      <button class="btn primary" type="submit">Onayla ve Faturayı Yazdır</button>
+    </form>
+    <form method="post" action="/order/{{order.no}}/cancel" hx-post="/order/{{order.no}}/cancel" hx-swap="none">
+      <button class="btn danger" type="submit">İptal Et</button>
+    </form>
+  </div>
+</div>
+
+<div class="order-info">
+  <div>Tarih: <b>{{order.datetime}}</b></div>
+  <div>Toplam: <b>{{order.grand_total}} TL</b></div>
+  <div>Platform: <b>{{order.entegration}}</b></div>
+  <div>Kargo: <b>{{order.cargo_company}}</b></div>
+</div>
+
+<div class="address">Adres: {{order.ship_address or order.invoice_address}}</div>
+
+<h3>Ürünler</h3>
+<div class="urunler">
+  {% for urun in order.order_product %}
+  <div class="urun card">
+    <div class="thumb">
+      {% if urun.picture %}
+      <img src="{{urun.picture}}" alt="ürün" />
+      {% else %}
+      <div class="img-ph">IMG</div>
+      {% endif %}
+    </div>
+    <div class="urun-info">
+      <div class="ad">{{urun.name}}</div>
+      <div class="mini">
+        Stok: {{urun.store_stock_code}} |
+        Barkod: {{urun.barcode}} |
+        Adet: {{urun.quantity}}
+      </div>
+      <div class="mini">Depo Yeri: <b>{{urun.depo_yeri or "-"}}</b></div>
+    </div>
+    <label class="chk">
+      <input type="checkbox"
+             name="value"
+             value="true"
+             {% if urun.collected %}checked{% endif %}
+             hx-post="/toggle-collected"
+             hx-vals='{"barcode":"{{urun.barcode}}", "order_no": "{{order.no}}"}'
+             hx-swap="none"
+             hx-trigger="change">
+      Toplandı
+    </label>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
